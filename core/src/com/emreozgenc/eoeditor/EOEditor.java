@@ -2,16 +2,14 @@ package com.emreozgenc.eoeditor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.emreozgenc.eoeditor.entities.EOEditorObject;
+import com.emreozgenc.eoeditor.entities.EOEditorRectObject;
 
 public class EOEditor extends ApplicationAdapter {
     
@@ -20,14 +18,15 @@ public class EOEditor extends ApplicationAdapter {
     private SpriteBatch batch;
     private OrthographicCamera cam;
     
-    Texture img;
+    EOEditorObject obj;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        img = new Texture(Gdx.files.internal("badlogic.jpg"));
         cam = new OrthographicCamera(Gdx.graphics.getWidth() / PPM, Gdx.graphics.getHeight() / PPM);
         cam.position.set(Vector3.Zero);
+        
+        obj = new EOEditorRectObject(0, 0, 0, 3, 3);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class EOEditor extends ApplicationAdapter {
         handleCameraMovement();
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
-        batch.draw(img, 0, 0, 2, 2);
+        obj.render(batch);
         batch.end();
     }
 
