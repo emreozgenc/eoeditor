@@ -6,8 +6,11 @@
 package com.emreozgenc.eoeditor.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.emreozgenc.eoeditor.EOEditor;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
+import java.awt.Canvas;
 import javax.swing.SwingUtilities;
 
 /**
@@ -16,19 +19,24 @@ import javax.swing.SwingUtilities;
  */
 public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLauncher {
 
-    private LwjglAWTCanvas canvas;
+    private Canvas canvas;
     public EOEditor editor;
 
     public DesktopLauncher() {
         editor = new EOEditor();
         editor.setLauncher(this);
-        canvas = new LwjglAWTCanvas(editor);
-        canvas.getCanvas().setSize(800, 600);
+        canvas = new Canvas();
+        canvas.setSize(800, 600);
 
         initComponents();
-        canvasPanel.add(canvas.getCanvas());
+        canvasPanel.add(canvas);
         setResizable(false);
         setVisible(true);
+        
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.width = 800;
+        config.height = 600;
+        new LwjglApplication(editor, config, canvas);
     }
 
     /**
