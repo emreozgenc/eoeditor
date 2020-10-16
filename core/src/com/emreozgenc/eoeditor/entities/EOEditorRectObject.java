@@ -10,8 +10,8 @@ public class EOEditorRectObject extends EOEditorObject {
     private float height;
     private Texture texture;
     
-    public EOEditorRectObject(float posX, float posY, int layerIndex, float width, float height) {
-        super(posX, posY, layerIndex);
+    public EOEditorRectObject(float posX, float posY, int layerIndex, String name, float width, float height) {
+        super(posX, posY, layerIndex, name);
         this.width = width;
         this.height = height;
         
