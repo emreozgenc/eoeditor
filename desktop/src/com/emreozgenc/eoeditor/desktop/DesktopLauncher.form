@@ -250,6 +250,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Set Camera Zoom"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cameraZoomSetButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="cameraZoomResetButton">
                   <Properties>
@@ -258,6 +261,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Reset Camera Zoom"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cameraZoomResetButtonActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

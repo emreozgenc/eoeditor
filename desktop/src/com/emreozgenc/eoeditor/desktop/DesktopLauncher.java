@@ -139,9 +139,19 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
 
         cameraZoomSetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         cameraZoomSetButton.setText("Set Camera Zoom");
+        cameraZoomSetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cameraZoomSetButtonActionPerformed(evt);
+            }
+        });
 
         cameraZoomResetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         cameraZoomResetButton.setText("Reset Camera Zoom");
+        cameraZoomResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cameraZoomResetButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout cameraOptionsPanelLayout = new javax.swing.GroupLayout(cameraOptionsPanel);
         cameraOptionsPanel.setLayout(cameraOptionsPanelLayout);
@@ -274,6 +284,18 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private void cameraPositionResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraPositionResetButtonActionPerformed
         editor.resetCameraPosition();
     }//GEN-LAST:event_cameraPositionResetButtonActionPerformed
+
+    private void cameraZoomSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraZoomSetButtonActionPerformed
+        String zoomStr = cameraZoomField.getText();
+        zoomStr = zoomStr.replace(',', '.');
+        
+        float zoom = Float.parseFloat(zoomStr);
+        editor.setCameraZoom(zoom);
+    }//GEN-LAST:event_cameraZoomSetButtonActionPerformed
+
+    private void cameraZoomResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraZoomResetButtonActionPerformed
+        editor.resetCameraZoom();
+    }//GEN-LAST:event_cameraZoomResetButtonActionPerformed
 
     /**
      * @param args the command line arguments

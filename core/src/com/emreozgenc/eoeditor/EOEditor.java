@@ -37,7 +37,6 @@ public class EOEditor extends ApplicationAdapter {
 
         obj = new EOEditorRectObject(0, 0, 0, "Emre", 3, 3);
         renderer = new ShapeRenderer();
-        
         startCamTimer();
         
     }
@@ -102,6 +101,14 @@ public class EOEditor extends ApplicationAdapter {
     public void resetCameraPosition() {
         cam.position.x = 0f;
         cam.position.y = 0f;
+    }
+    
+    public void setCameraZoom(float zoom) {
+        cam.zoom = 1 / zoom;
+    }
+    
+    public void resetCameraZoom() {
+        cam.zoom = 1;
     }
     
     public void startCamTimer() {
