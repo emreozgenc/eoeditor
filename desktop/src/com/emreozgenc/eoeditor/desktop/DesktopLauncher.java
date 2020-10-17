@@ -63,6 +63,9 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         cameraZoomField = new javax.swing.JTextField();
         cameraZoomSetButton = new javax.swing.JButton();
         cameraZoomResetButton = new javax.swing.JButton();
+        cameraMovementSpeedLabel = new javax.swing.JLabel();
+        cameraMovementSpeedField = new javax.swing.JTextField();
+        cameraMovementSpeedSetButton = new javax.swing.JButton();
         objectOptionsPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -153,6 +156,20 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
             }
         });
 
+        cameraMovementSpeedLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cameraMovementSpeedLabel.setText("Camera Movement Speed :");
+
+        cameraMovementSpeedField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cameraMovementSpeedField.setText("1");
+
+        cameraMovementSpeedSetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        cameraMovementSpeedSetButton.setText("Set Camera Movement Speed");
+        cameraMovementSpeedSetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cameraMovementSpeedSetButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout cameraOptionsPanelLayout = new javax.swing.GroupLayout(cameraOptionsPanel);
         cameraOptionsPanel.setLayout(cameraOptionsPanelLayout);
         cameraOptionsPanelLayout.setHorizontalGroup(
@@ -170,7 +187,10 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                     .addComponent(cameraZoomLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cameraZoomField)
                     .addComponent(cameraZoomSetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cameraZoomResetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cameraZoomResetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cameraMovementSpeedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cameraMovementSpeedField)
+                    .addComponent(cameraMovementSpeedSetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         cameraOptionsPanelLayout.setVerticalGroup(
@@ -198,7 +218,13 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addComponent(cameraZoomSetButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cameraZoomResetButton)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cameraMovementSpeedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cameraMovementSpeedField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cameraMovementSpeedSetButton)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Camera Settings", cameraOptionsPanel);
@@ -297,6 +323,14 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         editor.resetCameraZoom();
     }//GEN-LAST:event_cameraZoomResetButtonActionPerformed
 
+    private void cameraMovementSpeedSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraMovementSpeedSetButtonActionPerformed
+        String speedStr = cameraMovementSpeedField.getText();
+        speedStr = speedStr.replace(',', '.');
+        
+        float movementSpeed = Float.parseFloat(speedStr);
+        editor.cameraMovementSpeed = movementSpeed;
+    }//GEN-LAST:event_cameraMovementSpeedSetButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -337,6 +371,9 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField cameraMovementSpeedField;
+    private javax.swing.JLabel cameraMovementSpeedLabel;
+    private javax.swing.JButton cameraMovementSpeedSetButton;
     private javax.swing.JPanel cameraOptionsPanel;
     private javax.swing.JTextField cameraPosXField;
     private javax.swing.JLabel cameraPosXLabel;

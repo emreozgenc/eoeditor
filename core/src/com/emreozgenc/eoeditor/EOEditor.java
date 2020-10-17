@@ -18,6 +18,7 @@ import java.util.TimerTask;
 public class EOEditor extends ApplicationAdapter {
 
     public final int PPM = 100;
+    public float cameraMovementSpeed = 1;
 
     private SpriteBatch batch;
     private OrthographicCamera cam;
@@ -71,8 +72,8 @@ public class EOEditor extends ApplicationAdapter {
             float deltaX = Gdx.input.getDeltaX();
             float deltaY = Gdx.input.getDeltaY();
 
-            cam.position.x -= deltaX * Gdx.graphics.getDeltaTime() * .7f;
-            cam.position.y += deltaY * Gdx.graphics.getDeltaTime() * .7f;
+            cam.position.x -= deltaX * Gdx.graphics.getDeltaTime() * .7f * cameraMovementSpeed;
+            cam.position.y += deltaY * Gdx.graphics.getDeltaTime() * .7f * cameraMovementSpeed;
         }
 
         cam.update();
