@@ -5,7 +5,6 @@
  */
 package com.emreozgenc.eoeditor.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.emreozgenc.eoeditor.EOEditor;

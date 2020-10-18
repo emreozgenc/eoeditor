@@ -11,7 +11,6 @@ buildscript {
     }
     dependencies {
         
-
     }
 }
 
@@ -56,6 +55,6 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        
+        compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.12'
     }
 }

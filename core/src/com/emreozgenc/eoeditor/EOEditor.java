@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
+import com.emreozgenc.eoeditor.xml.XMLCreator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,6 +36,7 @@ public class EOEditor extends ApplicationAdapter {
 
         renderer = new ShapeRenderer();
         startCamTimer();
+        new XMLCreator();
         
     }
 
