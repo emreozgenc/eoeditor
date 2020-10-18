@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.emreozgenc.eoeditor.entities.EOEditorObject;
-import com.emreozgenc.eoeditor.entities.EOEditorRectObject;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,8 +25,7 @@ public class EOEditor extends ApplicationAdapter {
     
     //Timers
     private Timer camTimer;
-
-    EOEditorObject obj;
+ 
 
     @Override
     public void create() {
@@ -36,7 +33,6 @@ public class EOEditor extends ApplicationAdapter {
         cam = new OrthographicCamera(Gdx.graphics.getWidth() / PPM, Gdx.graphics.getHeight() / PPM);
         cam.position.set(Vector3.Zero);
 
-        obj = new EOEditorRectObject(0, 0, 0, "Emre", 3, 3);
         renderer = new ShapeRenderer();
         startCamTimer();
         
@@ -51,14 +47,7 @@ public class EOEditor extends ApplicationAdapter {
 
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
-        obj.render(batch);
         batch.end();
-
-        renderer.setProjectionMatrix(cam.combined);
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.GREEN);
-        renderer.rect(obj.getPosX(), obj.getPosY(), 3, 3);
-        renderer.end();
 
     }
 

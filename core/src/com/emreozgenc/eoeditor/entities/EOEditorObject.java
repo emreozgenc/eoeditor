@@ -1,53 +1,44 @@
 package com.emreozgenc.eoeditor.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
-public abstract class EOEditorObject {
-
-    protected float posX;
-    protected float posY;
-    protected int layerIndex;
-    protected String name;
-
-    public EOEditorObject(float posX, float posY, int layerIndex, String name) {
-        this.posX = posX;
-        this.posY = posY;
+public class EOEditorObject {
+    private float posX;
+    private float posY;
+    private float width;
+    private float height;
+    private Texture texture;
+    private int layerIndex;
+    
+    public EOEditorObject(float width, float height, int layerIndex, String texturePath) {
+        posX = posY = 0;
+        this.width = width;
+        this.height = height;
         this.layerIndex = layerIndex;
-        this.name = name;
+        
+        texture = new Texture(Gdx.files.external(texturePath));
     }
     
-    public abstract void render(SpriteBatch batc);
-    public abstract void update(float delta);
-
-    public float getPosX() {
-        return this.posX;
+    public void setPos(Vector2 pos) {
+        posX = pos.x;
+        posY = pos.y;
     }
 
-    public float getPosY() {
-        return this.posY;
+    public Vector2 getPos() {
+        return new Vector2(posX, posY);
     }
-
+    
+    public void render(SpriteBatch batch) {
+        batch.draw(texture,
+                posX + width/2,
+                posY + height/2,
+                width, height);
+    }
+    
     public int getLayerIndex() {
-        return this.layerIndex;
-    }
-    
-    public String getName() {
-        return this.name;
-    }
-
-    public void setPosX(float posX) {
-        this.posX = posX;
-    }
-
-    public void setPosY(float posY) {
-        this.posY = posY;
-    }
-
-    public void setLayerIndex(int layerIndex) {
-        this.layerIndex = layerIndex;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
+        return layerIndex;
     }
 }
