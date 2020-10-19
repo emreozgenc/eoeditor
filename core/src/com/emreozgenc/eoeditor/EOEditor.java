@@ -3,14 +3,13 @@ package com.emreozgenc.eoeditor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.emreozgenc.eoeditor.entities.EOEditorGridSystem;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
-import com.emreozgenc.eoeditor.xml.XMLCreator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,6 +20,7 @@ public class EOEditor extends ApplicationAdapter {
 
     private SpriteBatch batch;
     private OrthographicCamera cam;
+    private EOEditorGridSystem gridSystem;
     private ShapeRenderer renderer;
     private IEOEditorLauncher launcher;
     
@@ -35,8 +35,8 @@ public class EOEditor extends ApplicationAdapter {
         cam.position.set(Vector3.Zero);
 
         renderer = new ShapeRenderer();
+        gridSystem = new EOEditorGridSystem();
         startCamTimer();
-        new XMLCreator();
         
     }
 
@@ -49,6 +49,7 @@ public class EOEditor extends ApplicationAdapter {
 
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
+        gridSystem.render(batch);
         batch.end();
 
     }
