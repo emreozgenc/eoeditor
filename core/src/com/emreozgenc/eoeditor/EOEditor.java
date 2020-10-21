@@ -31,7 +31,7 @@ public class EOEditor extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        cam = new OrthographicCamera(Gdx.graphics.getWidth() / PPM, Gdx.graphics.getHeight() / PPM);
+        cam = new OrthographicCamera(Gdx.graphics.getWidth() * 2 / PPM, Gdx.graphics.getHeight() * 2/ PPM);
         cam.position.set(Vector3.Zero);
 
         renderer = new ShapeRenderer();
