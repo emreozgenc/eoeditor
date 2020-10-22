@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -103,9 +104,11 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         jScrollPane1 = new javax.swing.JScrollPane();
         listList = new javax.swing.JList<>();
         listDeleteButton = new javax.swing.JButton();
+        listAddSceneButton = new javax.swing.JButton();
         listImportLabel = new javax.swing.JLabel();
         listImportPathField = new javax.swing.JTextField();
         listImportButton = new javax.swing.JButton();
+        listLoadButton = new javax.swing.JButton();
         listSaveLabel = new javax.swing.JLabel();
         listSaveButton = new javax.swing.JButton();
 
@@ -368,13 +371,29 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         listDeleteButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         listDeleteButton.setText("Delete Selected Object");
 
+        listAddSceneButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        listAddSceneButton.setText("Add Selected Object to Scene");
+
         listImportLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         listImportLabel.setText("Import Saved XML :");
 
         listImportPathField.setEditable(false);
 
         listImportButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        listImportButton.setText("Import XML File");
+        listImportButton.setText("Select XML File");
+        listImportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listImportButtonActionPerformed(evt);
+            }
+        });
+
+        listLoadButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        listLoadButton.setText("Load Selected File");
+        listLoadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listLoadButtonActionPerformed(evt);
+            }
+        });
 
         listSaveLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         listSaveLabel.setText("Save Existing Objects to XML :");
@@ -401,7 +420,9 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                     .addComponent(listImportPathField)
                     .addComponent(listImportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(listSaveLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(listSaveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(listSaveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listAddSceneButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listLoadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         listPanelLayout.setVerticalGroup(
@@ -413,17 +434,21 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listDeleteButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listAddSceneButton)
+                .addGap(18, 18, 18)
                 .addComponent(listImportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listImportPathField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listImportButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listLoadButton)
+                .addGap(18, 18, 18)
                 .addComponent(listSaveLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listSaveButton)
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Existing O.", listPanel);
@@ -632,6 +657,45 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         }
     }//GEN-LAST:event_listSaveButtonActionPerformed
 
+    private void listImportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listImportButtonActionPerformed
+        JFileChooser fc = new JFileChooser();
+        String dir = System.getProperty("user.home") + "/Desktop";
+        fc.setCurrentDirectory(new File(dir));
+        
+        int result = fc.showDialog(this, "Open XML");
+        
+        if(result == JFileChooser.APPROVE_OPTION) {
+            listImportPathField.setText(fc.getSelectedFile().getAbsolutePath());
+        }
+    }//GEN-LAST:event_listImportButtonActionPerformed
+
+    private void listLoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listLoadButtonActionPerformed
+        String pathStr = listImportPathField.getText();
+        
+        if(!pathStr.endsWith(".xml")) {
+            JOptionPane.showMessageDialog(this, "Please select a xml file.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        XStream xs = new XStream(new StaxDriver());
+        xs.alias("Root", EOEditorExisRootObjectXML.class);
+        xs.alias("Object", EOEditorExisObjectXML.class);
+        EOEditorExisRootObjectXML root = (EOEditorExisRootObjectXML) xs.fromXML(new File(pathStr));
+        
+        EOEditorExisList.exObjects.clear();
+        for(EOEditorExisObjectXML object : root.Objects) {
+            EOEditorExisObject nObj = new EOEditorExisObject(object.width, object.height, object.texturePath, object.name);
+            EOEditorExisList.exObjects.add(nObj);
+        }
+        
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+            model.addElement(object.name);
+        }
+        
+        listList.setModel(model);
+    }//GEN-LAST:event_listLoadButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -688,12 +752,14 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private javax.swing.JButton cameraZoomSetButton;
     private javax.swing.JPanel canvasPanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton listAddSceneButton;
     private javax.swing.JButton listDeleteButton;
     private javax.swing.JLabel listExistingLabel;
     private javax.swing.JButton listImportButton;
     private javax.swing.JLabel listImportLabel;
     private javax.swing.JTextField listImportPathField;
     private javax.swing.JList<String> listList;
+    private javax.swing.JButton listLoadButton;
     private javax.swing.JPanel listPanel;
     private javax.swing.JButton listSaveButton;
     private javax.swing.JLabel listSaveLabel;
