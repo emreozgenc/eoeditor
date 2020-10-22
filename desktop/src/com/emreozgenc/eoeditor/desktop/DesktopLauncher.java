@@ -5,17 +5,30 @@
  */
 package com.emreozgenc.eoeditor.desktop;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.emreozgenc.eoeditor.EOEditor;
 import com.emreozgenc.eoeditor.desktop.entities.EOEditorExisList;
 import com.emreozgenc.eoeditor.desktop.entities.EOEditorExisObject;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
+import com.emreozgenc.eoeditor.desktop.xml.EOEditorExisRootObjectXML;
+import com.emreozgenc.eoeditor.desktop.xml.EOEditorExisObjectXML;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.awt.Canvas;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 
@@ -38,12 +51,12 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         canvasPanel.add(canvas);
         setResizable(false);
         setVisible(true);
-        
+
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = 800;
         config.height = 600;
         new LwjglApplication(editor, config, canvas);
-        
+
     }
 
     /**
@@ -89,7 +102,12 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         listExistingLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listList = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        listDeleteButton = new javax.swing.JButton();
+        listImportLabel = new javax.swing.JLabel();
+        listImportPathField = new javax.swing.JTextField();
+        listImportButton = new javax.swing.JButton();
+        listSaveLabel = new javax.swing.JLabel();
+        listSaveButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -347,10 +365,25 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         listList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(listList);
 
-        jButton1.setText("Test");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        listDeleteButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        listDeleteButton.setText("Delete Selected Object");
+
+        listImportLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        listImportLabel.setText("Import Saved XML :");
+
+        listImportPathField.setEditable(false);
+
+        listImportButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        listImportButton.setText("Import XML File");
+
+        listSaveLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        listSaveLabel.setText("Save Existing Objects to XML :");
+
+        listSaveButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        listSaveButton.setText("Save to XML");
+        listSaveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                listSaveButtonActionPerformed(evt);
             }
         });
 
@@ -363,7 +396,12 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addGroup(listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(listExistingLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(listDeleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listImportLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listImportPathField)
+                    .addComponent(listImportButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listSaveLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listSaveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         listPanelLayout.setVerticalGroup(
@@ -374,8 +412,18 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(324, Short.MAX_VALUE))
+                .addComponent(listDeleteButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(listImportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listImportPathField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listImportButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(listSaveLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listSaveButton)
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Existing O.", listPanel);
@@ -471,10 +519,10 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         JFileChooser fc = new JFileChooser();
         String path = System.getProperty("user.home") + "/Desktop";
         fc.setCurrentDirectory(new File(path));
-        
+
         int result = fc.showDialog(this, "Select your texture");
-        
-        if(result == JFileChooser.APPROVE_OPTION) {
+
+        if (result == JFileChooser.APPROVE_OPTION) {
             String p = fc.getSelectedFile().getAbsolutePath();
             objectAssetPathField.setText(p);
         }
@@ -483,38 +531,106 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private void objectAssetAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_objectAssetAddButtonActionPerformed
         String widthStr = objectAssetWidthField.getText();
         widthStr = widthStr.replace(',', '.');
-        float width = Float.parseFloat(widthStr);
-        
+
         String heightStr = objectAssetWidthField.getText();
         heightStr = heightStr.replace(',', '.');
-        float height = Float.parseFloat(heightStr);
-        
+
         String nameStr = objectAssetNameField.getText();
         String pathStr = objectAssetPathField.getText();
-        
+
+        if (widthStr.isEmpty() || heightStr.isEmpty() || nameStr.isEmpty() || pathStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill empty fields!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        float height = Float.parseFloat(heightStr);
+        float width = Float.parseFloat(widthStr);
+
+        for (EOEditorExisObject object : EOEditorExisList.exObjects) {
+            if (object.name.equals(nameStr)) {
+                JOptionPane.showMessageDialog(this, "You have already object with same name!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        String fileType;
+        if (pathStr.endsWith(".png")) {
+            fileType = ".png";
+        } else if (pathStr.endsWith(".jpg")) {
+            fileType = ".jpg";
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select .png or .jpg file", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        FileInputStream is;
+        FileOutputStream os;
+
+        try {
+            File dir = new File("objectAssets");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            is = new FileInputStream(pathStr);
+            os = new FileOutputStream(new File("objectAssets/" + nameStr + fileType));
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            is.close();
+            os.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error while transfering file!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        pathStr = "objectAssets/" + nameStr + fileType;
+
         EOEditorExisObject obj = new EOEditorExisObject(width, height, pathStr, nameStr);
         EOEditorExisList.exObjects.add(obj);
-        
+
         DefaultListModel<String> model = new DefaultListModel<>();
-        
-        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+
+        for (EOEditorExisObject object : EOEditorExisList.exObjects) {
             model.addElement(object.name);
         }
-        
-        listList.setModel(model);
 
+        listList.setModel(model);
+        JOptionPane.showMessageDialog(this, "Object created successfully.", "Info", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_objectAssetAddButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int index = listList.getSelectedIndex();
-        System.out.println(index);
-        EOEditorExisObject obj = EOEditorExisList.exObjects.get(index);
+    private void listSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listSaveButtonActionPerformed
+        XStream xs = new XStream(new StaxDriver());
         
-        System.out.println(obj.height);
-        System.out.println(obj.width);
-        System.out.println(obj.texturePath);
-        System.out.println(obj.name);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        xs.alias("Root", EOEditorExisRootObjectXML.class);
+        xs.alias("Object", EOEditorExisObjectXML.class);
+        
+        EOEditorExisRootObjectXML Root = new EOEditorExisRootObjectXML();
+        
+        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+            EOEditorExisObjectXML obj = new EOEditorExisObjectXML(
+                object.width,
+                object.height,
+                object.texturePath,
+                object.name);
+            
+            Root.Objects.add(obj);
+        }
+        
+        String result = xs.toXML(Root);
+        System.out.println(result);
+        
+        String savePath = System.getProperty("user.home") + "/Desktop/eo.xml";
+        try {
+            FileWriter fw = new FileWriter(savePath);
+            fw.write(result);
+            fw.flush();
+            fw.close();
+        } catch (IOException ex) {
+            
+        }
+    }//GEN-LAST:event_listSaveButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -550,7 +666,7 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 new DesktopLauncher();
             }
         });
-        
+
         System.console();
 
     }
@@ -571,11 +687,16 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private javax.swing.JButton cameraZoomResetButton;
     private javax.swing.JButton cameraZoomSetButton;
     private javax.swing.JPanel canvasPanel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton listDeleteButton;
     private javax.swing.JLabel listExistingLabel;
+    private javax.swing.JButton listImportButton;
+    private javax.swing.JLabel listImportLabel;
+    private javax.swing.JTextField listImportPathField;
     private javax.swing.JList<String> listList;
     private javax.swing.JPanel listPanel;
+    private javax.swing.JButton listSaveButton;
+    private javax.swing.JLabel listSaveLabel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton objectAssetAddButton;
     private javax.swing.JTextField objectAssetHeightField;
