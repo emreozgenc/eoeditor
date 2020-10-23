@@ -14,6 +14,8 @@ import com.emreozgenc.eoeditor.desktop.entities.EOEditorExisObject;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
 import com.emreozgenc.eoeditor.desktop.xml.EOEditorExisRootObjectXML;
 import com.emreozgenc.eoeditor.desktop.xml.EOEditorExisObjectXML;
+import com.emreozgenc.eoeditor.entities.EOEditorArrays;
+import com.emreozgenc.eoeditor.entities.EOEditorObject;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.awt.Canvas;
@@ -370,9 +372,19 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
 
         listDeleteButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         listDeleteButton.setText("Delete Selected Object");
+        listDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listDeleteButtonActionPerformed(evt);
+            }
+        });
 
         listAddSceneButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         listAddSceneButton.setText("Add Selected Object to Scene");
+        listAddSceneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listAddSceneButtonActionPerformed(evt);
+            }
+        });
 
         listImportLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         listImportLabel.setText("Import Saved XML :");
@@ -695,6 +707,36 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         
         listList.setModel(model);
     }//GEN-LAST:event_listLoadButtonActionPerformed
+
+    private void listDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listDeleteButtonActionPerformed
+        int index = listList.getSelectedIndex();
+        EOEditorExisObject obj = EOEditorExisList.exObjects.get(index);
+        
+        File tmp = new File(obj.texturePath);
+        tmp.delete();
+        
+        EOEditorExisList.exObjects.remove(index);
+        
+        DefaultListModel<String> model = new DefaultListModel<>();
+        
+        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+            model.addElement(object.name);
+        }
+        
+        listList.setModel(model);
+    }//GEN-LAST:event_listDeleteButtonActionPerformed
+
+    private void listAddSceneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listAddSceneButtonActionPerformed
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                int index = listList.getSelectedIndex();
+                EOEditorExisObject o = EOEditorExisList.exObjects.get(index);
+                EOEditorObject obj = new EOEditorObject(o.width, o.height, 0, o.texturePath);
+                EOEditorArrays.objects.add(obj);
+            }
+        } );
+    }//GEN-LAST:event_listAddSceneButtonActionPerformed
 
     /**
      * @param args the command line arguments

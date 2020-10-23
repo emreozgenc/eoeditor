@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.emreozgenc.eoeditor.entities.EOEditorArrays;
 import com.emreozgenc.eoeditor.entities.EOEditorGridSystem;
+import com.emreozgenc.eoeditor.entities.EOEditorObject;
 import com.emreozgenc.eoeditor.interfaces.IEOEditorLauncher;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,6 +28,8 @@ public class EOEditor extends ApplicationAdapter {
     
     //Timers
     private Timer camTimer;
+    
+    private EOEditorObject test;
  
 
     @Override
@@ -37,7 +41,7 @@ public class EOEditor extends ApplicationAdapter {
         renderer = new ShapeRenderer();
         gridSystem = new EOEditorGridSystem();
         startCamTimer();
-        
+
     }
 
     @Override
@@ -50,6 +54,10 @@ public class EOEditor extends ApplicationAdapter {
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
         gridSystem.render(batch);
+        for(EOEditorObject object : EOEditorArrays.objects) {
+            object.render(batch);
+        }
+        System.out.println(EOEditorArrays.objects.size);
         batch.end();
 
     }

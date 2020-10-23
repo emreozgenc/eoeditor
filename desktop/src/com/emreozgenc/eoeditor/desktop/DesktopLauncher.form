@@ -547,6 +547,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Delete Selected Object"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listDeleteButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="listAddSceneButton">
                   <Properties>
@@ -555,6 +558,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Add Selected Object to Scene"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listAddSceneButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="listImportLabel">
                   <Properties>

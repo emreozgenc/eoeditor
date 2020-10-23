@@ -18,8 +18,7 @@ public class EOEditorObject {
         this.width = width;
         this.height = height;
         this.layerIndex = layerIndex;
-        
-        texture = new Texture(Gdx.files.external(texturePath));
+        texture = new Texture(Gdx.files.internal("badlogic.jpg"));
     }
     
     public void setPos(Vector2 pos) {
