@@ -3,6 +3,7 @@ package com.emreozgenc.eoeditor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +26,8 @@ public class EOEditor extends ApplicationAdapter {
     private EOEditorGridSystem gridSystem;
     private ShapeRenderer renderer;
     private IEOEditorLauncher launcher;
+    
+    public static EOEditorObject selectedObject = null;
     
     //Timers
     private Timer camTimer;
@@ -49,6 +52,7 @@ public class EOEditor extends ApplicationAdapter {
         Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glLineWidth(2f);
+        update();
         handleCameraMovement();
 
         batch.setProjectionMatrix(cam.combined);
@@ -57,9 +61,22 @@ public class EOEditor extends ApplicationAdapter {
         for(EOEditorObject object : EOEditorArrays.objects) {
             object.render(batch);
         }
-        System.out.println(EOEditorArrays.objects.size);
         batch.end();
-
+        
+        renderer.setProjectionMatrix(cam.combined);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.GREEN);
+        if(selectedObject != null) {
+            renderer.rect(selectedObject.getPos().x, selectedObject.getPos().y,
+                    selectedObject.getWidth(), selectedObject.getHeight());
+        }
+        renderer.end();
+    }
+    
+    private void update() {
+        for(EOEditorObject object : EOEditorArrays.objects) {
+            object.update();
+        }
     }
 
     @Override
@@ -88,6 +105,10 @@ public class EOEditor extends ApplicationAdapter {
     public Vector3 getCameraPosition() {
         System.out.println(cam.position);
         return cam.position;
+    }
+    
+    public OrthographicCamera getCamera() {
+        return cam;
     }
 
     public void setLauncher(IEOEditorLauncher launcher) {

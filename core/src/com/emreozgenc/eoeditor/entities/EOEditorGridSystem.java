@@ -15,8 +15,8 @@ public class EOEditorGridSystem {
         grids = new ArrayList<>();
         gridTexture = new Texture(Gdx.files.internal("grid.png"));
         
-        for(int i=-500; i<=500; i++) {
-            for(int j=-500; j<=500; j++) {
+        for(int i=-100; i<=100; i++) {
+            for(int j=-100; j<=100; j++) {
                 grids.add(new EOEditorGrid(i, j, gridTexture));
             }
         }

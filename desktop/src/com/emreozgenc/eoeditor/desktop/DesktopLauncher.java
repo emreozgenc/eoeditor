@@ -8,6 +8,7 @@ package com.emreozgenc.eoeditor.desktop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.math.Vector2;
 import com.emreozgenc.eoeditor.EOEditor;
 import com.emreozgenc.eoeditor.desktop.entities.EOEditorExisList;
 import com.emreozgenc.eoeditor.desktop.entities.EOEditorExisObject;
@@ -113,6 +114,23 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         listLoadButton = new javax.swing.JButton();
         listSaveLabel = new javax.swing.JLabel();
         listSaveButton = new javax.swing.JButton();
+        sceneObjectsPanel = new javax.swing.JPanel();
+        sceneObjectsListLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        sceneList = new javax.swing.JList<>();
+        sceneObjectsRemoveButton = new javax.swing.JButton();
+        objectSettingsLabel = new javax.swing.JLabel();
+        objectWidthLabel = new javax.swing.JLabel();
+        objectWidthField = new javax.swing.JTextField();
+        objectHeightLabel = new javax.swing.JLabel();
+        objectHeightField = new javax.swing.JTextField();
+        objectIndexLabel = new javax.swing.JLabel();
+        objectIndexField = new javax.swing.JTextField();
+        objectPosXLabel = new javax.swing.JLabel();
+        objectPosXField = new javax.swing.JTextField();
+        objectPosYLabel = new javax.swing.JLabel();
+        objectPosYField = new javax.swing.JTextField();
+        objectSetButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -270,7 +288,7 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addComponent(cameraMovementSpeedField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cameraMovementSpeedSetButton)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Camera Settings", cameraOptionsPanel);
@@ -355,10 +373,10 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addComponent(objectAssetNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(objectAssetAddButton)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
-        tabbedPane.addTab("Object Settings", objectOptionsPanel);
+        tabbedPane.addTab("Import Object", objectOptionsPanel);
 
         listPanel.setBackground(new java.awt.Color(234, 226, 183));
 
@@ -460,10 +478,129 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 .addComponent(listSaveLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listSaveButton)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
-        tabbedPane.addTab("Existing O.", listPanel);
+        tabbedPane.addTab("Objects", listPanel);
+
+        sceneObjectsPanel.setBackground(new java.awt.Color(234, 226, 183));
+
+        sceneObjectsListLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        sceneObjectsListLabel.setText("Scene Objects :");
+
+        sceneList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        sceneList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        sceneList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                sceneListValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(sceneList);
+
+        sceneObjectsRemoveButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        sceneObjectsRemoveButton.setText("Remove Selected Object from Scene");
+
+        objectSettingsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectSettingsLabel.setText("Selected Object :");
+
+        objectWidthLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectWidthLabel.setText("Width :");
+
+        objectWidthField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        objectHeightLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectHeightLabel.setText("Height :");
+
+        objectHeightField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        objectIndexLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectIndexLabel.setText("Index :");
+
+        objectIndexField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        objectPosXLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectPosXLabel.setText("Position X :");
+
+        objectPosXField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        objectPosYLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectPosYLabel.setText("Position Y :");
+
+        objectPosYField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        objectSetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        objectSetButton.setText("Set Object Settings");
+        objectSetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                objectSetButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout sceneObjectsPanelLayout = new javax.swing.GroupLayout(sceneObjectsPanel);
+        sceneObjectsPanel.setLayout(sceneObjectsPanelLayout);
+        sceneObjectsPanelLayout.setHorizontalGroup(
+            sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sceneObjectsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(objectSetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sceneObjectsListLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sceneObjectsRemoveButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                    .addComponent(objectSettingsLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, sceneObjectsPanelLayout.createSequentialGroup()
+                        .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(objectPosYLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(objectPosXLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                            .addComponent(objectIndexLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(objectHeightLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(objectWidthLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(objectWidthField)
+                            .addComponent(objectHeightField)
+                            .addComponent(objectIndexField)
+                            .addComponent(objectPosXField)
+                            .addComponent(objectPosYField))))
+                .addContainerGap())
+        );
+        sceneObjectsPanelLayout.setVerticalGroup(
+            sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sceneObjectsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(sceneObjectsListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sceneObjectsRemoveButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(objectSettingsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(objectWidthLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(objectWidthField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(objectHeightLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(objectHeightField, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(objectIndexLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(objectIndexField, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(objectPosXLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(objectPosXField, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(sceneObjectsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(objectPosYLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(objectPosYField, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(objectSetButton)
+                .addContainerGap(77, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Scene Objects", sceneObjectsPanel);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -639,25 +776,25 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
 
     private void listSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listSaveButtonActionPerformed
         XStream xs = new XStream(new StaxDriver());
-        
+
         xs.alias("Root", EOEditorExisRootObjectXML.class);
         xs.alias("Object", EOEditorExisObjectXML.class);
-        
+
         EOEditorExisRootObjectXML Root = new EOEditorExisRootObjectXML();
-        
-        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+
+        for (EOEditorExisObject object : EOEditorExisList.exObjects) {
             EOEditorExisObjectXML obj = new EOEditorExisObjectXML(
-                object.width,
-                object.height,
-                object.texturePath,
-                object.name);
-            
+                    object.width,
+                    object.height,
+                    object.texturePath,
+                    object.name);
+
             Root.Objects.add(obj);
         }
-        
+
         String result = xs.toXML(Root);
         System.out.println(result);
-        
+
         String savePath = System.getProperty("user.home") + "/Desktop/eo.xml";
         try {
             FileWriter fw = new FileWriter(savePath);
@@ -665,7 +802,7 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
             fw.flush();
             fw.close();
         } catch (IOException ex) {
-            
+
         }
     }//GEN-LAST:event_listSaveButtonActionPerformed
 
@@ -673,56 +810,56 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         JFileChooser fc = new JFileChooser();
         String dir = System.getProperty("user.home") + "/Desktop";
         fc.setCurrentDirectory(new File(dir));
-        
+
         int result = fc.showDialog(this, "Open XML");
-        
-        if(result == JFileChooser.APPROVE_OPTION) {
+
+        if (result == JFileChooser.APPROVE_OPTION) {
             listImportPathField.setText(fc.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_listImportButtonActionPerformed
 
     private void listLoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listLoadButtonActionPerformed
         String pathStr = listImportPathField.getText();
-        
-        if(!pathStr.endsWith(".xml")) {
+
+        if (!pathStr.endsWith(".xml")) {
             JOptionPane.showMessageDialog(this, "Please select a xml file.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         XStream xs = new XStream(new StaxDriver());
         xs.alias("Root", EOEditorExisRootObjectXML.class);
         xs.alias("Object", EOEditorExisObjectXML.class);
         EOEditorExisRootObjectXML root = (EOEditorExisRootObjectXML) xs.fromXML(new File(pathStr));
-        
+
         EOEditorExisList.exObjects.clear();
-        for(EOEditorExisObjectXML object : root.Objects) {
+        for (EOEditorExisObjectXML object : root.Objects) {
             EOEditorExisObject nObj = new EOEditorExisObject(object.width, object.height, object.texturePath, object.name);
             EOEditorExisList.exObjects.add(nObj);
         }
-        
+
         DefaultListModel<String> model = new DefaultListModel<>();
-        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+        for (EOEditorExisObject object : EOEditorExisList.exObjects) {
             model.addElement(object.name);
         }
-        
+
         listList.setModel(model);
     }//GEN-LAST:event_listLoadButtonActionPerformed
 
     private void listDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listDeleteButtonActionPerformed
         int index = listList.getSelectedIndex();
         EOEditorExisObject obj = EOEditorExisList.exObjects.get(index);
-        
+
         File tmp = new File(obj.texturePath);
         tmp.delete();
-        
+
         EOEditorExisList.exObjects.remove(index);
-        
+
         DefaultListModel<String> model = new DefaultListModel<>();
-        
-        for(EOEditorExisObject object : EOEditorExisList.exObjects) {
+
+        for (EOEditorExisObject object : EOEditorExisList.exObjects) {
             model.addElement(object.name);
         }
-        
+
         listList.setModel(model);
     }//GEN-LAST:event_listDeleteButtonActionPerformed
 
@@ -731,12 +868,72 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
             @Override
             public void run() {
                 int index = listList.getSelectedIndex();
+
+                if (index == -1) {
+                    return;
+                }
+
                 EOEditorExisObject o = EOEditorExisList.exObjects.get(index);
                 EOEditorObject obj = new EOEditorObject(o.width, o.height, 0, o.texturePath);
                 EOEditorArrays.objects.add(obj);
+
+                DefaultListModel<String> model = new DefaultListModel<>();
+
+                int i=0;
+                for (EOEditorObject object : EOEditorArrays.objects) {
+                    i++;
+                    model.addElement(String.valueOf(i));
+                }
+                
+                sceneList.setModel(model);
             }
-        } );
+        });
     }//GEN-LAST:event_listAddSceneButtonActionPerformed
+
+    private void sceneListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_sceneListValueChanged
+        int index = sceneList.getSelectedIndex();
+        
+        if(index == -1)
+            return;
+        
+        EOEditor.selectedObject = EOEditorArrays.objects.get(index);
+        EOEditorObject obj = EOEditor.selectedObject;
+        
+        objectWidthField.setText(String.valueOf(obj.getWidth()));
+        objectHeightField.setText(String.valueOf(obj.getHeight()));
+        objectIndexField.setText(String.valueOf(obj.getLayerIndex()));
+        objectPosXField.setText(String.valueOf(obj.getPos().x));
+        objectPosYField.setText(String.valueOf(obj.getPos().y));
+        
+    }//GEN-LAST:event_sceneListValueChanged
+
+    private void objectSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_objectSetButtonActionPerformed
+        String widthStr = objectWidthField.getText();
+        String heightStr = objectHeightField.getText();
+        String indexStr = objectIndexField.getText();
+        String posXStr = objectPosXField.getText();
+        String posYStr = objectPosYField.getText();
+        
+        widthStr = widthStr.replace(',', '.');
+        heightStr = heightStr.replace(',', '.');
+        indexStr = indexStr.replace(',', '.');
+        posXStr = posXStr.replace(',', '.');
+        posYStr = posYStr.replace(',', '.');
+        
+        float width = Float.parseFloat(widthStr);
+        float height = Float.parseFloat(heightStr);
+        float posX = Float.parseFloat(posXStr);
+        float posY = Float.parseFloat(posYStr);
+        int index = Integer.parseInt(indexStr);
+        
+        EOEditorObject obj = EOEditor.selectedObject;
+        
+        obj.setPos(new Vector2(posX, posY));
+        obj.setWidth(width);
+        obj.setHeight(height);
+        obj.setLayerIndex(index);
+        
+    }//GEN-LAST:event_objectSetButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -794,6 +991,7 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private javax.swing.JButton cameraZoomSetButton;
     private javax.swing.JPanel canvasPanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton listAddSceneButton;
     private javax.swing.JButton listDeleteButton;
     private javax.swing.JLabel listExistingLabel;
@@ -816,8 +1014,24 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private javax.swing.JButton objectAssetPathSelectButton;
     private javax.swing.JTextField objectAssetWidthField;
     private javax.swing.JLabel objectAssetWidthLabel;
+    private javax.swing.JTextField objectHeightField;
+    private javax.swing.JLabel objectHeightLabel;
+    private javax.swing.JTextField objectIndexField;
+    private javax.swing.JLabel objectIndexLabel;
     private javax.swing.JPanel objectOptionsPanel;
+    private javax.swing.JTextField objectPosXField;
+    private javax.swing.JLabel objectPosXLabel;
+    private javax.swing.JTextField objectPosYField;
+    private javax.swing.JLabel objectPosYLabel;
+    private javax.swing.JButton objectSetButton;
+    private javax.swing.JLabel objectSettingsLabel;
     private javax.swing.JLabel objectTitleLabel;
+    private javax.swing.JTextField objectWidthField;
+    private javax.swing.JLabel objectWidthLabel;
+    private javax.swing.JList<String> sceneList;
+    private javax.swing.JLabel sceneObjectsListLabel;
+    private javax.swing.JPanel sceneObjectsPanel;
+    private javax.swing.JButton sceneObjectsRemoveButton;
     private javax.swing.JLabel screenSizeLabel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
