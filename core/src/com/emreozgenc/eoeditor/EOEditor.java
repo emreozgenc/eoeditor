@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.emreozgenc.eoeditor.entities.EOEditorArrays;
 import com.emreozgenc.eoeditor.entities.EOEditorGridSystem;
@@ -76,6 +77,19 @@ public class EOEditor extends ApplicationAdapter {
     private void update() {
         for(EOEditorObject object : EOEditorArrays.objects) {
             object.update();
+        }
+        
+        if(Gdx.input.isButtonJustPressed(Buttons.RIGHT)) {
+            selectedObject = null;
+            launcher.setSelectedObject(-1);
+        }
+        
+        if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
+            if(selectedObject != null) {
+                Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+                selectedObject.setPos(new Vector2(pos.x - selectedObject.getWidth() / 2,
+                        pos.y - selectedObject.getHeight() / 2));
+            }
         }
     }
 
@@ -147,5 +161,9 @@ public class EOEditor extends ApplicationAdapter {
         if(camTimer != null) {
             camTimer.cancel();
         }
+    }
+    
+    public void setSelectedObject(int index) {        
+        launcher.setSelectedObject(index);
     }
 }

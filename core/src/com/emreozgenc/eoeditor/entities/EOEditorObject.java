@@ -45,7 +45,9 @@ public class EOEditorObject {
             Rectangle rect = new Rectangle(posX, posY, width, height);
             
             if(rect.contains(new Vector2(mPos.x, mPos.y))) {
-                System.out.println("Success");
+                int index = EOEditorArrays.objects.indexOf(this, true);
+                EOEditor.selectedObject = this;
+                editor.setSelectedObject(index);
             }
         }
     }

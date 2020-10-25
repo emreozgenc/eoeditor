@@ -876,6 +876,7 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 EOEditorExisObject o = EOEditorExisList.exObjects.get(index);
                 EOEditorObject obj = new EOEditorObject(o.width, o.height, 0, o.texturePath);
                 EOEditorArrays.objects.add(obj);
+                EOEditorArrays.sortObjects();
 
                 DefaultListModel<String> model = new DefaultListModel<>();
 
@@ -932,6 +933,8 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         obj.setWidth(width);
         obj.setHeight(height);
         obj.setLayerIndex(index);
+        
+        EOEditorArrays.sortObjects();
         
     }//GEN-LAST:event_objectSetButtonActionPerformed
 
@@ -1040,6 +1043,16 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     public void upgradeCamPositionFields(float posX, float posY) {
         cameraPosXField.setText(String.valueOf(posX));
         cameraPosYField.setText(String.valueOf(posY));
+    }
+
+    @Override
+    public void setSelectedObject(int index) {
+        
+        if(index == -1) {
+            sceneList.clearSelection();
+        }
+        
+        sceneList.setSelectedIndex(index);
     }
 
 }
