@@ -32,6 +32,7 @@ public class EOEditor extends ApplicationAdapter {
     
     //Timers
     private Timer camTimer;
+    private Timer objectTimer;
     
     private EOEditorObject test;
  
@@ -45,6 +46,7 @@ public class EOEditor extends ApplicationAdapter {
         renderer = new ShapeRenderer();
         gridSystem = new EOEditorGridSystem();
         startCamTimer();
+        startObjectTimer();
 
     }
 
@@ -165,5 +167,24 @@ public class EOEditor extends ApplicationAdapter {
     
     public void setSelectedObject(int index) {        
         launcher.setSelectedObject(index);
+    }
+
+    public void startObjectTimer() {
+        objectTimer = new Timer();
+        objectTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(selectedObject != null) {
+                    launcher.setSelectedObjectPositionFields(selectedObject.getPos().x,
+                            selectedObject.getPos().y);
+                }
+            }
+        }, 300, 300);
+    }
+    
+    public void pauseObjectTimer() {
+        if(objectTimer != null) {
+            objectTimer.cancel();
+        }
     }
 }

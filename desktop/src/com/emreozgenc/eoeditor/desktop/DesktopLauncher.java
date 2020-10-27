@@ -499,6 +499,11 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
 
         sceneObjectsRemoveButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         sceneObjectsRemoveButton.setText("Remove Selected Object from Scene");
+        sceneObjectsRemoveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sceneObjectsRemoveButtonActionPerformed(evt);
+            }
+        });
 
         objectSettingsLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         objectSettingsLabel.setText("Selected Object :");
@@ -522,11 +527,27 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         objectPosXLabel.setText("Position X :");
 
         objectPosXField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectPosXField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                objectPosXFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                objectPosXFieldFocusLost(evt);
+            }
+        });
 
         objectPosYLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         objectPosYLabel.setText("Position Y :");
 
         objectPosYField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        objectPosYField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                objectPosYFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                objectPosYFieldFocusLost(evt);
+            }
+        });
 
         objectSetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         objectSetButton.setText("Set Object Settings");
@@ -874,7 +895,7 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
                 }
 
                 EOEditorExisObject o = EOEditorExisList.exObjects.get(index);
-                EOEditorObject obj = new EOEditorObject(o.width, o.height, 0, o.texturePath);
+                EOEditorObject obj = new EOEditorObject(o.width, o.height, 0, o.texturePath, 0);
                 EOEditorArrays.objects.add(obj);
                 EOEditorArrays.sortObjects();
 
@@ -937,6 +958,32 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         EOEditorArrays.sortObjects();
         
     }//GEN-LAST:event_objectSetButtonActionPerformed
+
+    private void objectPosXFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_objectPosXFieldFocusGained
+        editor.pauseObjectTimer();
+    }//GEN-LAST:event_objectPosXFieldFocusGained
+
+    private void objectPosYFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_objectPosYFieldFocusGained
+        editor.pauseObjectTimer();
+    }//GEN-LAST:event_objectPosYFieldFocusGained
+
+    private void objectPosXFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_objectPosXFieldFocusLost
+        editor.startObjectTimer();
+    }//GEN-LAST:event_objectPosXFieldFocusLost
+
+    private void objectPosYFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_objectPosYFieldFocusLost
+        editor.startObjectTimer();
+    }//GEN-LAST:event_objectPosYFieldFocusLost
+
+    private void sceneObjectsRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sceneObjectsRemoveButtonActionPerformed
+        int index = sceneList.getSelectedIndex();
+        
+        if(index == -1)
+            return;
+        
+        EOEditorArrays.objects.removeIndex(index);
+        EOEditorArrays.sortObjects();
+    }//GEN-LAST:event_sceneObjectsRemoveButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1039,6 +1086,14 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 
+    private void clearObjectFields() {
+        objectPosXField.setText("");
+        objectPosYField.setText("");
+        objectIndexField.setText("");
+        objectWidthField.setText("");
+        objectHeightField.setText("");
+    }
+    
     @Override
     public void upgradeCamPositionFields(float posX, float posY) {
         cameraPosXField.setText(String.valueOf(posX));
@@ -1050,9 +1105,16 @@ public class DesktopLauncher extends javax.swing.JFrame implements IEOEditorLaun
         
         if(index == -1) {
             sceneList.clearSelection();
+            clearObjectFields();
         }
         
         sceneList.setSelectedIndex(index);
+    }
+
+    @Override
+    public void setSelectedObjectPositionFields(float posX, float posY) {
+        objectPosXField.setText(String.valueOf(posX));
+        objectPosYField.setText(String.valueOf(posY));
     }
 
 }

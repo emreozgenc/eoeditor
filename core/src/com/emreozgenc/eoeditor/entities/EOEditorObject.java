@@ -17,12 +17,14 @@ public class EOEditorObject {
     private Texture texture;
     private int layerIndex;
     private EOEditor editor;
+    private int type;
     
-    public EOEditorObject(float width, float height, int layerIndex, String texturePath) {
+    public EOEditorObject(float width, float height, int layerIndex, String texturePath, int type) {
         posX = posY = 0;
         this.width = width;
         this.height = height;
         this.layerIndex = layerIndex;
+        this.type = type;
         texture = new Texture(Gdx.files.internal(texturePath));
         editor = (EOEditor)Gdx.app.getApplicationListener();
     }
